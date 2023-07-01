@@ -3,6 +3,7 @@ import os
 import customtkinter
 from tkinter import * 
 from tkinter import filedialog
+import time
 
 
 def sendfile():
@@ -23,6 +24,8 @@ def sendfile():
         s.send(f"{filename}{SEPARATOR}{filesize}".encode())
 
         with open(filename, "rb") as f:
+            start = time.perf_counter()
+            last_update = start
             while True:
                 # read the bytes from the file
                 bytes_read = f.read(BUFFER_SIZE)
@@ -32,6 +35,13 @@ def sendfile():
                 if not bytes_read:
                     break
                 progress.set(done/50)
+
+                time_elapsed = time.perf_counter() - last_update
+                if time_elapsed >= 3:
+                    time_elapsed_total = time.perf_counter() - start
+                    calculated_speed = round(uploaded/time_elapsed_total/1000000, 2)
+                    speed.configure(text=f"{calculated_speed} MB/s")
+                    last_update = time.perf_counter()
 
                 root.update_idletasks()
         s.close()
@@ -51,6 +61,9 @@ def sendfile():
     # This is the section of code which creates a progress bar
     progress=customtkinter.CTkProgressBar(root)
     progress.place(x=29, y=103)
+
+    speed = customtkinter.CTkLabel(root, text='')
+    speed.place(x=29, y=113)
 
 
     root.mainloop()
