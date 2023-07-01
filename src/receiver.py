@@ -36,10 +36,10 @@ def receive():
         downloaded = 0
 
         with open(filename, "wb") as f:
+            start = time.perf_counter()
+            last_update = start
+            
             while True:
-                start = time.perf_counter()
-                last_update = start
-                
                 bytes_read = client_socket.recv(BUFFER_SIZE)
                 if not bytes_read:    
                     break
