@@ -37,7 +37,7 @@ def sendfile():
                 progress.set(done/50)
 
                 time_elapsed = time.perf_counter() - last_update
-                if time_elapsed >= 3:
+                if time_elapsed >= 1.5:
                     time_elapsed_total = time.perf_counter() - start
                     calculated_speed = round(uploaded/time_elapsed_total/1000000, 2)
                     speed.configure(text=f"{calculated_speed} MB/s")
