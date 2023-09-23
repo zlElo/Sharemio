@@ -33,7 +33,7 @@ customtkinter.CTkButton(frame, text='Select and send', command=sendfile).pack(pa
 
 
 # This is the section of code which creates the a label
-customtkinter.CTkLabel(root, text='v1.3').place(x=8, y=180)
+customtkinter.CTkLabel(root, text='v1.4').place(x=8, y=180)
 
 
 root.mainloop()
