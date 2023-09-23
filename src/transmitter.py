@@ -4,6 +4,7 @@ import customtkinter
 from tkinter import * 
 from tkinter import filedialog
 import time
+import threading
 
 
 def sendfile():
@@ -50,6 +51,10 @@ def sendfile():
         s.close()
         print('[+] done')
 
+    def btn_function():
+        transmitter_thread = threading.Thread(target=go)
+        transmitter_thread.start()
+
 
     root = customtkinter.CTk()
 
@@ -59,7 +64,7 @@ def sendfile():
 
     inputfield = customtkinter.CTkEntry(root, placeholder_text="IP of host")
     inputfield.place(x=29, y=40)
-    customtkinter.CTkButton(root, text='Ok', command=go, width=10).place(x=180, y=40)
+    customtkinter.CTkButton(root, text='Ok', command=btn_function, width=10).place(x=180, y=40)
 
     # This is the section of code which creates a progress bar
     progress=customtkinter.CTkProgressBar(root)
