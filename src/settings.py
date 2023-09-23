@@ -40,5 +40,3 @@ def settings_window():
     status.place(x=3, y=175)
 
     root.mainloop()
-
-settings_window()
