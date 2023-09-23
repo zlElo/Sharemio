@@ -19,7 +19,7 @@ def receive():
     def openserv():
         SERVER_HOST = "0.0.0.0"
         SERVER_PORT = 5001
-        BUFFER_SIZE = 100000
+        BUFFER_SIZE = 1024 * 1024
         SEPARATOR = "<SEPARATOR>"
 
         s = socket.socket()

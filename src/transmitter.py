@@ -9,7 +9,7 @@ import time
 def sendfile():
     def go():
         SEPARATOR = "<SEPARATOR>"
-        BUFFER_SIZE = 100000
+        BUFFER_SIZE = 1024 * 1024
         host = inputfield.get()
         port = 5001
         filename = filedialog.askopenfilename()
