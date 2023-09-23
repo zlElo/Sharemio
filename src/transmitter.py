@@ -5,7 +5,7 @@ from tkinter import *
 from tkinter import filedialog
 import time
 import threading
-
+from info_window import progress_done
 
 def sendfile():
     def go():
@@ -41,15 +41,18 @@ def sendfile():
             progress.set(done/50)
 
             time_elapsed = time.perf_counter() - last_update
-            if time_elapsed >= 1.5:
+            if time_elapsed >= 1:
                 time_elapsed_total = time.perf_counter() - start
                 calculated_speed = round(uploaded/time_elapsed_total/1000000, 2)
                 speed.configure(text=f"{calculated_speed} MB/s")
                 last_update = time.perf_counter()
 
             root.update_idletasks()
+
         s.close()
         print('[+] done')
+        progress_done()
+
 
     def btn_function():
         transmitter_thread = threading.Thread(target=go)
@@ -59,19 +62,22 @@ def sendfile():
     root = customtkinter.CTk()
 
     # This is the section of code which creates the main window
-    root.geometry('291x156')
+    root.geometry('291x200')
     root.title('Send file')
 
-    inputfield = customtkinter.CTkEntry(root, placeholder_text="IP of host")
-    inputfield.place(x=29, y=40)
-    customtkinter.CTkButton(root, text='Ok', command=btn_function, width=10).place(x=180, y=40)
+    frame = customtkinter.CTkFrame(root)
+    frame.pack(pady=20)
+
+    inputfield = customtkinter.CTkEntry(frame, placeholder_text="IP of host")
+    inputfield.pack(pady=10, padx=40)
+    customtkinter.CTkButton(frame, text='Ok', command=btn_function).pack(pady=10)
 
     # This is the section of code which creates a progress bar
     progress=customtkinter.CTkProgressBar(root)
-    progress.place(x=29, y=103)
+    progress.pack(pady=10)
 
-    speed = customtkinter.CTkLabel(root, text='')
-    speed.place(x=29, y=113)
+    speed = customtkinter.CTkLabel(root, text='0 mb/s')
+    speed.pack()
 
 
     root.mainloop()

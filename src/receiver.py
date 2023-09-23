@@ -5,7 +5,7 @@ import customtkinter
 from ip import get_local_ip
 import time
 import threading
-
+from info_window import progress_done
 
 def connection_timeouted():
     root = customtkinter.CTk()
@@ -75,7 +75,7 @@ def receive():
                 progress.set(done_/50)
 
                 time_elapsed = time.perf_counter() - last_update
-                if time_elapsed >= 1.5:
+                if time_elapsed >= 1:
                     time_elapsed_total = time.perf_counter() - start
                     calculated_speed = round(downloaded/time_elapsed_total/1000000, 2)
                     speed.configure(text=f"{calculated_speed} MB/s")
@@ -86,6 +86,7 @@ def receive():
         client_socket.close()
         s.close()
         print('[+] done')
+        progress_done()
 
 
     def btn_function():
