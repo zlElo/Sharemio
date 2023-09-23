@@ -10,7 +10,7 @@ import threading
 def sendfile():
     def go():
         SEPARATOR = "<SEPARATOR>"
-        BUFFER_SIZE = 1024 * 1024
+        BUFFER_SIZE = 2048 * 2048
         host = inputfield.get()
         port = 5001
         filename = filedialog.askopenfilename()
