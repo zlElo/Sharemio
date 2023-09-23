@@ -6,6 +6,7 @@ from ip import get_local_ip
 import time
 import threading
 from info_window import progress_done
+import json
 
 def connection_timeouted():
     root = customtkinter.CTk()
@@ -17,6 +18,10 @@ def connection_timeouted():
 
 def receive():
     def openserv():
+        with open('src\settings.json', 'r') as f:
+            data = json.load(f) # load the JSON data spom the file
+            path_to_save = data['out_path']
+            
         SERVER_HOST = "0.0.0.0"
         SERVER_PORT = 5001
         BUFFER_SIZE = 2048 * 2048
@@ -54,7 +59,7 @@ def receive():
         filesize = int(filesize)
         downloaded = 0
 
-        with open(filename, "wb") as f:
+        with open(f'{path_to_save}/{filename}', "wb") as f:
             start = time.perf_counter()
             last_update = start
             
@@ -101,6 +106,7 @@ def receive():
     root.title('Host for receive')
     root.minsize(291, 156)
     root.maxsize(291, 156)
+    root.iconbitmap('src/icon.ico')
 
     frame = customtkinter.CTkFrame(root)
     frame.pack(pady=10)

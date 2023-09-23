@@ -63,7 +63,10 @@ def sendfile():
 
     # This is the section of code which creates the main window
     root.geometry('291x200')
+    root.minsize(291, 200)
+    root.maxsize(291, 200)
     root.title('Send file')
+    root.iconbitmap('src/icon.ico')
 
     frame = customtkinter.CTkFrame(root)
     frame.pack(pady=20)
