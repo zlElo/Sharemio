@@ -9,7 +9,7 @@ import time
 def sendfile():
     def go():
         SEPARATOR = "<SEPARATOR>"
-        BUFFER_SIZE = 4096
+        BUFFER_SIZE = 100000
         host = inputfield.get()
         port = 5001
         filename = filedialog.askopenfilename()
@@ -23,27 +23,30 @@ def sendfile():
 
         s.send(f"{filename}{SEPARATOR}{filesize}".encode())
 
-        with open(filename, "rb") as f:
-            start = time.perf_counter()
-            last_update = start
-            while True:
-                # read the bytes from the file
-                bytes_read = f.read(BUFFER_SIZE)
-                s.sendall(bytes_read)
-                uploaded += len(bytes_read)
-                done = int(50*uploaded/filesize)
-                if not bytes_read:
-                    break
-                progress.set(done/50)
+        def read_file_in_chunks(filename, chunk_size):
+            with open(filename, "rb") as f:
+                while True:
+                    bytes_read = f.read(chunk_size)
+                    if not bytes_read:
+                        break
+                    yield bytes_read
 
-                time_elapsed = time.perf_counter() - last_update
-                if time_elapsed >= 1.5:
-                    time_elapsed_total = time.perf_counter() - start
-                    calculated_speed = round(uploaded/time_elapsed_total/1000000, 2)
-                    speed.configure(text=f"{calculated_speed} MB/s")
-                    last_update = time.perf_counter()
+        start = time.perf_counter()
+        last_update = start
+        for bytes_read in read_file_in_chunks(filename, BUFFER_SIZE):
+            s.sendall(bytes_read)
+            uploaded += len(bytes_read)
+            done = int(50*uploaded/filesize)
+            progress.set(done/50)
 
-                root.update_idletasks()
+            time_elapsed = time.perf_counter() - last_update
+            if time_elapsed >= 1.5:
+                time_elapsed_total = time.perf_counter() - start
+                calculated_speed = round(uploaded/time_elapsed_total/1000000, 2)
+                speed.configure(text=f"{calculated_speed} MB/s")
+                last_update = time.perf_counter()
+
+            root.update_idletasks()
         s.close()
         print('[+] done')
 
